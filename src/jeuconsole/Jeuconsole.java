@@ -23,7 +23,7 @@ public class Jeuconsole {
         Joueur joueur1 = creerJoueur(sc, nomJ1);
         Joueur joueur2 = creerJoueur(sc, nomJ2);
 
-        System.out.println("\n✅ Les équipes sont prêtes !");
+        System.out.println("\n Les équipes sont prêtes !");
         joueur1.afficherEquipe();
         System.out.println();
         joueur2.afficherEquipe();
@@ -45,10 +45,10 @@ public class Jeuconsole {
 
         // Fin du jeu
         if (joueur1.aEncoreDesPersonnagesVivants()) {
-            System.out.println("\n🏁 Victoire de " + joueur1.getNomUtilisateur()
+            System.out.println("\n Victoire de " + joueur1.getNomUtilisateur()
                     + " ! Tous les personnages de " + joueur2.getNomUtilisateur() + " sont éliminés.");
         } else {
-            System.out.println("\n🏁 Victoire de " + joueur2.getNomUtilisateur()
+            System.out.println("\n Victoire de " + joueur2.getNomUtilisateur()
                     + " ! Tous les personnages de " + joueur1.getNomUtilisateur() + " sont éliminés.");
         }
 
@@ -71,7 +71,7 @@ public class Jeuconsole {
     }
 
     private static void jouerUnTour(Scanner sc, Joueur attaquant, Joueur defenseur) {
-        System.out.println("\n👉 Tour de " + attaquant.getNomUtilisateur());
+        System.out.println("\n Tour de " + attaquant.getNomUtilisateur());
 
         System.out.println("Choisis ton personnage attaquant :");
         attaquant.afficherEquipe();
@@ -100,12 +100,12 @@ public class Jeuconsole {
             try {
                 choix = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("❌ Entrée invalide. Tape 1, 2 ou 3.");
+                System.out.println(" Entrée invalide. Tape 1, 2 ou 3.");
                 continue;
             }
 
             if (choix < 1 || choix > 3) {
-                System.out.println("❌ Choix hors limite. Tape 1, 2 ou 3.");
+                System.out.println(" Choix hors limite. Tape 1, 2 ou 3.");
                 continue;
             }
 
@@ -113,11 +113,11 @@ public class Jeuconsole {
             Personnage p = joueur.getEquipe()[index];
 
             if (p == null) {
-                System.out.println("❌ Slot vide. Choisis un autre.");
+                System.out.println(" Slot vide. Choisis un autre.");
                 continue;
             }
             if (!p.estVivant()) {
-                System.out.println("❌ Ce personnage est KO. Choisis un personnage vivant.");
+                System.out.println(" Ce personnage est KO. Choisis un personnage vivant.");
                 continue;
             }
 
