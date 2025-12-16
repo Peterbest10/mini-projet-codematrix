@@ -2,10 +2,6 @@ package jeuconsole;
 
 import java.util.Scanner;
 
-/**
- *
- * @author Admin
- */
 public class Jeuconsole {
 
     public static void main(String[] args) {
@@ -13,29 +9,26 @@ public class Jeuconsole {
 
         System.out.println("Bienvenue dans le Jeu de Combat !");
 
-        // Phase 1 : Création des joueurs
-        System.out.print("Joueur 1, entre ton nom : ");
-        String nomJ1 = sc.nextLine().trim();
-
-        System.out.print("Joueur 2, entre ton nom : ");
-        String nomJ2 = sc.nextLine().trim();
+        String nomJ1 = demanderTexteNonVide(sc, "Joueur 1, entre ton nom : ");
+        String nomJ2 = demanderTexteNonVide(sc, "Joueur 2, entre ton nom : ");
 
         Joueur joueur1 = creerJoueur(sc, nomJ1);
         Joueur joueur2 = creerJoueur(sc, nomJ2);
 
-        System.out.println("\n Les équipes sont prêtes !");
+        System.out.println("\nLes équipes sont prêtes !");
         joueur1.afficherEquipe();
         System.out.println();
         joueur2.afficherEquipe();
 
-        // Phase 2 : Boucle de combat
         int tour = 1;
         while (joueur1.aEncoreDesPersonnagesVivants() && joueur2.aEncoreDesPersonnagesVivants()) {
             System.out.println("\n--- TOUR " + tour + " ---");
 
             // Tour joueur 1
             jouerUnTour(sc, joueur1, joueur2);
-            if (!joueur2.aEncoreDesPersonnagesVivants()) break;
+            if (!joueur2.aEncoreDesPersonnagesVivants()) {
+                break;
+            }
 
             // Tour joueur 2
             jouerUnTour(sc, joueur2, joueur1);
@@ -45,11 +38,11 @@ public class Jeuconsole {
 
         // Fin du jeu
         if (joueur1.aEncoreDesPersonnagesVivants()) {
-            System.out.println("\n Victoire de " + joueur1.getNomUtilisateur()
-                    + " ! Tous les personnages de " + joueur2.getNomUtilisateur() + " sont éliminés.");
+            System.out.println("\nVictoire de " + joueur1.getNom()
+                    + " ! Tous les personnages de " + joueur2.getNom() + " sont éliminés.");
         } else {
-            System.out.println("\n Victoire de " + joueur2.getNomUtilisateur()
-                    + " ! Tous les personnages de " + joueur1.getNomUtilisateur() + " sont éliminés.");
+            System.out.println("\nVictoire de " + joueur2.getNom()
+                    + " ! Tous les personnages de " + joueur1.getNom() + " sont éliminés.");
         }
 
         sc.close();
@@ -59,11 +52,11 @@ public class Jeuconsole {
 
     private static Joueur creerJoueur(Scanner sc, String nomJoueur) {
         System.out.println("\n" + nomJoueur + ", crée ton équipe :");
+        System.out.println("Rappel : chaque personnage commence avec 100 HP et 20 d'attaque.");
 
         Personnage[] equipe = new Personnage[3];
         for (int i = 0; i < 3; i++) {
-            System.out.print("Nom du personnage " + (i + 1) + " : ");
-            String nomPerso = sc.nextLine().trim();
+            String nomPerso = demanderTexteNonVide(sc, "Nom du personnage " + (i + 1) + " : ");
             equipe[i] = new Personnage(nomPerso, 100, 20);
         }
 
@@ -71,13 +64,13 @@ public class Jeuconsole {
     }
 
     private static void jouerUnTour(Scanner sc, Joueur attaquant, Joueur defenseur) {
-        System.out.println("\n Tour de " + attaquant.getNomUtilisateur());
+        System.out.println("\nTour de " + attaquant.getNom());
 
         System.out.println("Choisis ton personnage attaquant :");
         attaquant.afficherEquipe();
         int idxAttaquant = choisirIndexPersonnageVivant(sc, attaquant);
 
-        System.out.println("Choisis la cible chez " + defenseur.getNomUtilisateur() + " :");
+        System.out.println("Choisis la cible chez " + defenseur.getNom() + " :");
         defenseur.afficherEquipe();
         int idxCible = choisirIndexPersonnageVivant(sc, defenseur);
 
@@ -87,7 +80,9 @@ public class Jeuconsole {
         System.out.println();
         pAttaquant.attaquer(pCible);
 
-        System.out.println("\nEtat de l'équipe de " + defenseur.getNomUtilisateur() + " :");
+        System.out.println("\nEtat des équipes après l'attaque :");
+        attaquant.afficherEquipe();
+        System.out.println();
         defenseur.afficherEquipe();
     }
 
@@ -100,12 +95,12 @@ public class Jeuconsole {
             try {
                 choix = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println(" Entrée invalide. Tape 1, 2 ou 3.");
+                System.out.println("Entrée invalide. Tape 1, 2 ou 3.");
                 continue;
             }
 
             if (choix < 1 || choix > 3) {
-                System.out.println(" Choix hors limite. Tape 1, 2 ou 3.");
+                System.out.println("Choix hors limite. Tape 1, 2 ou 3.");
                 continue;
             }
 
@@ -113,15 +108,26 @@ public class Jeuconsole {
             Personnage p = joueur.getEquipe()[index];
 
             if (p == null) {
-                System.out.println(" Slot vide. Choisis un autre.");
+                System.out.println("Cet emplacement est vide. Choisis un autre.");
                 continue;
             }
             if (!p.estVivant()) {
-                System.out.println(" Ce personnage est KO. Choisis un personnage vivant.");
+                System.out.println("Ce personnage est KO. Choisis un personnage vivant.");
                 continue;
             }
 
             return index;
+        }
+    }
+
+    private static String demanderTexteNonVide(Scanner sc, String message) {
+        while (true) {
+            System.out.print(message);
+            String texte = sc.nextLine().trim();
+            if (!texte.isEmpty()) {
+                return texte;
+            }
+            System.out.println("Tu dois entrer un texte non vide.");
         }
     }
 }

@@ -1,31 +1,31 @@
 package jeuconsole;
 
 /**
- *
- * @author Admin
+ * Cette classe représente un joueur.
+ * Un joueur possède un nom et une équipe de 3 personnages.
  */
 public class Joueur {
-    private String nomUtilisateur;
+
+    private String nom;
     private Personnage[] equipe;
 
-    public Joueur(String nomUtilisateur, Personnage[] equipe) {
-        this.nomUtilisateur = nomUtilisateur;
-        this.equipe = equipe;
-    }
+    /**
+     * Constructeur du joueur.
+     * On sécurise l'équipe pour qu'elle contienne exactement 3 personnages.
+     */
+    public Joueur(String nom, Personnage[] equipe) {
+        this.nom = nom;
 
-    // --- Méthodes demandées ---
-
-    // Retourne un personnage vivant (simple : le premier vivant trouvé)
-    public Personnage choisirPersonnageVivant() {
-        for (Personnage p : equipe) {
-            if (p != null && p.estVivant()) {
-                return p;
-            }
+        if (equipe == null || equipe.length != 3) {
+            this.equipe = new Personnage[3];
+        } else {
+            this.equipe = equipe;
         }
-        return null;
     }
 
-    // Vérifie s'il reste au moins un personnage vivant
+    /**
+     * Vérifie s'il reste au moins un personnage vivant dans l'équipe.
+     */
     public boolean aEncoreDesPersonnagesVivants() {
         for (Personnage p : equipe) {
             if (p != null && p.estVivant()) {
@@ -35,34 +35,65 @@ public class Joueur {
         return false;
     }
 
-    // Affiche les 3 personnages + état
+    /**
+     * Retourne le premier personnage vivant trouvé dans l'équipe.
+     * Cette méthode peut servir de "secours" si on veut un choix automatique.
+     */
+    public Personnage choisirPersonnageVivant() {
+        for (Personnage p : equipe) {
+            if (p != null && p.estVivant()) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retourne un personnage à partir de son numéro (1 à 3).
+     * Retourne null si le numéro est invalide.
+     */
+    public Personnage getPersonnageParNumero(int numero) {
+        if (numero < 1 || numero > equipe.length) {
+            return null;
+        }
+        return equipe[numero - 1];
+    }
+
+    /**
+     * Affiche l'équipe du joueur avec l'état des personnages.
+     */
     public void afficherEquipe() {
-        System.out.println("Equipe de " + nomUtilisateur + " :");
+        System.out.println("Equipe de " + nom + " :");
         for (int i = 0; i < equipe.length; i++) {
             System.out.print((i + 1) + ") ");
             if (equipe[i] == null) {
-                System.out.println("Vide");
+                System.out.println("Aucun personnage");
             } else {
                 equipe[i].afficherEtat();
             }
         }
     }
 
-    // --- Getters / Setters ---
+    // ---------------- Getters / Setters ----------------
 
-    public String getNomUtilisateur() {
-        return nomUtilisateur;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNomUtilisateur(String nomUtilisateur) {
-        this.nomUtilisateur = nomUtilisateur;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public Personnage[] getEquipe() {
         return equipe;
     }
 
+    /**
+     * Modifie l'équipe seulement si elle contient exactement 3 personnages.
+     */
     public void setEquipe(Personnage[] equipe) {
-        this.equipe = equipe;
+        if (equipe != null && equipe.length == 3) {
+            this.equipe = equipe;
+        }
     }
 }
